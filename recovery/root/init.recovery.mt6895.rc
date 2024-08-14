@@ -1,7 +1,6 @@
 import /keymint.service.mitee.rc
 import /tee-supplicant.rc
 import /miteelog.rc
-import /xiaomi.haptic.hal.rc
 
 on init
     setprop sys.usb.configfs 1
@@ -75,25 +74,12 @@ service mtk.plpath.utils.link /system/bin/mtk_plpath_utils
     oneshot
     seclabel u:r:recovery:s0
 
-service vibratorfeature-hal-service /vendor/bin/hw/vendor.xiaomi.hardware.vibratorfeature.service
-    class hal
-    user system
-    group system input
-    seclabel u:r:recovery:s0
-
 service vendor.gatekeeper-1-0 /vendor/bin/hw/android.hardware.gatekeeper@1.0-service
     interface android.hardware.gatekeeper@1.0::IGatekeeper default
     class hal
     user root
     group root
     disabled
-    seclabel u:r:recovery:s0
-    
-service haptic_hal /system/bin/haptic_hal.sh
-    user root
-    group root
-    disabled
-    oneshot
     seclabel u:r:recovery:s0
  
 on property:crypto.ready=1
@@ -127,9 +113,6 @@ on property:crypto.ready=0
     stop vendor.gatekeeper-1-0
     stop tee-supplicant
     stop miteelog
-
-on property:twrp.modules.loaded=true
-    start haptic_hal
 
 on boot
     start health-hal-2-1
